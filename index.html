@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Aghanim Hub DOM XSS PoC</title>
+<body style="font:16px system-ui;max-width:640px;margin:40px auto;padding:0 16px">
+<h3>Aghanim Hub — cross-origin DOM XSS PoC</h3>
+<p>Click the button. The Aghanim hub opens in a <b>new tab</b>, and
+<code>alert(document.domain)</code> fires there in the <code>demo.aghanim.app</code> origin.</p>
+<button style="font-size:16px;padding:10px 22px;cursor:pointer"
+        onclick="window.open('run.html','_blank')">Run PoC</button>
+</body>

